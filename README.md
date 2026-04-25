@@ -1,29 +1,70 @@
-# LG Online Sales Hackathon
+# LG Online Sales Forecasting
 
-LG AI Research가 주최한 판매량 예측 해커톤 저장소입니다. 제품 메타데이터와 시계열 판매 기록을 함께 사용해 transformer 기반 예측 모델을 구성했고, 예선 12위로 본선에 진출했습니다.
+> LG Aimers 3기 연계 DACON 온라인 해커톤에서 제품별 온라인 채널 판매량을 예측한 프로젝트입니다. 제품 메타데이터와 판매 이력을 함께 활용하는 시계열 예측 파이프라인을 구성했습니다.
 
-## Snapshot
+## Overview
 
-| Item | Detail |
+| Field | Details |
 | --- | --- |
-| Type | Competition solution |
-| Period | 2023.08-2023.09 |
-| Team | 4 people, team member |
-| Result | Preliminary 12th / 747 teams, final 24th / 43 teams |
-| Task | 온라인 채널 제품 판매량 회귀 예측 |
-| Key approach | Transformer-based time-series modeling |
+| Competition | 온라인 채널 제품 판매량 예측 AI 온라인 해커톤 |
+| Period | 2023.08.01 - 2023.09.17 |
+| Final Round | 2023.09.16 10:00 - 2023.09.17 16:00 |
+| Host | LG AI Research |
+| Platform | DACON |
+| Result | Preliminary 12th / 747 teams, Final 24th / 43 teams |
+| Team | 4 members, team member |
+| Task | Product-level online sales forecasting |
+| Related Activity | LG Aimers 3rd cohort |
 
-## Contribution
+## Approach
 
-- 판매 이력과 제품 속성을 함께 사용하는 입력 구조를 정리했습니다.
-- 결측 보정, 이상치 완화, 시간 피처 생성 등 전처리에 참여했습니다.
-- transformer 기반 시계열 예측 실험과 결과 정리에 기여했습니다.
-- 오프라인 본선 해커톤 환경에서 추가 실험을 진행했습니다.
+- Converted wide product-level sales history into a long time-series training table.
+- Built lag features, rolling statistics, calendar cycles, and product metadata features.
+- Trained a tabular forecasting model with log-transformed sales targets.
+- Used recursive multi-step forecasting to fill the sample submission horizon.
+- Provided notebooks and package-based forecasting code for reproducible submission generation.
 
-## Repository Layout
+## Forecasting Pipeline
 
-- `Preprocess.ipynb`: 데이터 정제 및 입력 구성
-- `Real_final_code_Transfomer.ipynb`: 최종 transformer 실험 노트북
+```text
+.
+|-- notebooks/
+|   |-- 01_data_overview.ipynb
+|   `-- 02_forecasting_pipeline.ipynb
+|-- src/lg_online_sales_forecasting/
+|   |-- config.py
+|   |-- data.py
+|   |-- features.py
+|   |-- modeling.py
+|   |-- pipeline.py
+|   |-- cli.py
+|   `-- metrics.py
+|-- requirements.txt
+`-- pyproject.toml
+```
+
+## Run
+
+Place DACON files under `data/`:
+
+```text
+data/
+|-- train.csv
+`-- sample_submission.csv
+```
+
+Run the forecasting pipeline:
+
+```bash
+pip install -r requirements.txt
+PYTHONPATH=src python -m lg_online_sales_forecasting \
+  --data-dir data \
+  --output submissions/sales_forecast_submission.csv
+```
+
+## Repository Scope
+
+This repository focuses on the forecasting workflow. Competition data, generated submissions, and model artifacts are excluded.
 
 ## Links
 
